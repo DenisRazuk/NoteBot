@@ -9,6 +9,7 @@ import os
 
 bot = telebot.TeleBot('902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI')
 
+
 num_chat = {}
 task_desc = {}
 
@@ -37,14 +38,16 @@ def phone(message):
 @bot.message_handler(content_types=['contact'])
 def read_phone(message):
     if num_chat.get(message.contact.phone_number) is None:
+        headers = {'content-type': 'application/json'}
         num_chat[int(message.chat.id)] = int(message.contact.phone_number.replace('+', ''))
         new_phone = int(message.contact.phone_number.replace('+', ''))
         pyt_q = {"id": new_phone, "telegramId": int(message.chat.id)}
         json_q = json.dumps(pyt_q)
-        r = requests.post('https://aoverinapp.herokuapp.com/users', json=json_q)
-        q = requests.get('https://aoverinapp.herokuapp.com/users', data=["id"])
-        print(q.text)
-
+        print(json_q)
+        r = requests.post('https://aoverinapp.herokuapp.com/users', data=json_q, headers=headers)
+        print(r.text)
+        # q = requests.get('https://aoverinapp.herokuapp.com/users', data=["id"])
+        # print(q.text)
         # url = 'https://aoverinapp.herokuapp.com/users'
         # data = {message.contact.phone_number, message.chat.id}
         # data_json = json.dumps(data)
@@ -65,14 +68,16 @@ def all_text(message):
         if message.text not in ('Да', 'Нет'):
             bot.send_message(message.chat.id, 'Добавить задачу?', reply_markup=keyboard1)
         elif message.text == 'Да':
+            headers = {'content-type': 'application/json'}
             pyt_q = {"id": num_chat[message.chat.id], "title": "Telegram", "description": task_desc[message.chat.id]}
             json_q = json.dumps(pyt_q)
-            r = requests.post('https://aoverinapp.herokuapp.com/joblists', json=json_q)
+            r = requests.post('https://aoverinapp.herokuapp.com/joblists', data=json_q,  headers=headers)
             bot.send_message(message.chat.id, 'Задача добавлена')
             print(json_q)
             task_desc[message.chat.id] = ''
             print(task_desc)
         elif message.text == 'Нет':
+
             bot.send_message(message.chat.id, 'Окей(')
             task_desc[message.chat.id] = ''
             print(task_desc)
