@@ -10,6 +10,7 @@ import os
 bot = telebot.TeleBot('902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI')
 
 num_chat = {}
+task_desc = {}
 
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True, True)
 keyboard1.row('Да', 'Нет')
@@ -59,13 +60,24 @@ def read_phone(message):
 @bot.message_handler(content_types=['text'])
 def all_text(message):
     if check_user(message):
-        if message.text == 'Да':
+        if message.text not in ('Да', 'Нет'):
+            task_desc[message.chat.id] = message.text
+        if message.text not in ('Да', 'Нет'):
+            bot.send_message(message.chat.id, 'Добавить задачу?', reply_markup=keyboard1)
+        elif message.text == 'Да':
+            pyt_q = {"id": num_chat[message.chat.id], "title": "Telegram", "description": task_desc[message.chat.id]}
+            json_q = json.dumps(pyt_q)
+            r = requests.post('https://aoverinapp.herokuapp.com/joblists', json=json_q)
             bot.send_message(message.chat.id, 'Задача добавлена')
+            print(json_q)
+            task_desc[message.chat.id] = ''
+            print(task_desc)
         elif message.text == 'Нет':
             bot.send_message(message.chat.id, 'Окей(')
-        else:
-            bot.send_message(message.chat.id, 'Добавить задачу?', reply_markup=keyboard1)
-        # Запрос в апишку
+            task_desc[message.chat.id] = ''
+            print(task_desc)
+
+
 
 
 # Запрос на отпрвку в апишку
@@ -74,6 +86,8 @@ def all_text(message):
 # response = urllib.request.urlopen('https://aoverinapp.herokuapp.com/users')
 #             # print(response.read())
 #             # response.close()
+
+
 # if "HEROKU" in list(os.environ.keys()):
     # #     logger = telebot.logger
     # #     telebot.logger.setLevel(logging.INFO)
@@ -93,4 +107,4 @@ def all_text(message):
     # #     # если переменной окружения HEROKU нету, значит это запуск с машины разработчика.
     # #     # Удаляем вебхук на всякий случай, и запускаем с обычным поллингом.
     # #     bot.remove_webhook()
-    bot.polling()
+bot.polling()
