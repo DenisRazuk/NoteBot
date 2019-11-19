@@ -35,6 +35,14 @@ def phone(message):
         bot.send_message(message.chat.id, 'Для регистрации необходим номер телефона', reply_markup=keyboard)
 
 
+@bot.message_handler(commands=['task'])
+def task(message):
+    if check_user(message):
+        headers = {'content-type': 'application/json'}
+        r = requests.get('https://aoverinapp.herokuapp.com/joblists', params={"id": num_chat.get(message.chat.id)}, headers=headers)
+        bot.send_message(message.chat.id, r.text)
+
+
 @bot.message_handler(content_types=['contact'])
 def read_phone(message):
     if num_chat.get(message.contact.phone_number) is None:
