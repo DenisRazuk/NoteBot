@@ -9,7 +9,6 @@ import os
 
 bot = telebot.TeleBot('902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI')
 
-
 num_chat = {}
 task_desc = {}
 
@@ -40,7 +39,11 @@ def task(message):
     if check_user(message):
         headers = {'content-type': 'application/json'}
         r = requests.get('https://aoverinapp.herokuapp.com/joblists', params={"id": num_chat.get(message.chat.id)}, headers=headers)
-        bot.send_message(message.chat.id, r.text)
+        pars = json.loads(r.text)
+        raspars = pars[0]
+        print(pars)
+        print(r.text)
+        bot.send_message(message.chat.id, str(raspars.get('description'))) #
 
 
 @bot.message_handler(content_types=['contact'])
@@ -61,7 +64,6 @@ def read_phone(message):
         # data_json = json.dumps(data)
         # payload = {'json_payload': data_json}
         # req = requests.get(url, data = payload)
-
 
 # @bot.message_handler(content_types=['text'])
 # def num_phone(message):
@@ -91,6 +93,10 @@ def all_text(message):
             print(task_desc)
 
 
+# Сделать /help с описанием
+# Сделать тест webhook
+# Сделать сбор num_chat перед запуском с БД
+# Переделать чек на запрос в API
 
 
 # Запрос на отпрвку в апишку
