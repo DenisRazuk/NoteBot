@@ -1,1 +1,1 @@
-python BotTest.pyвввввввввввв
+web: python BotTest.py
