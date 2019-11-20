@@ -37,8 +37,9 @@ def task(message):
         headers = {'content-type': 'application/json'}
         r = requests.get('https://aoverinapp.herokuapp.com/joblists', params={"id": num_chat.get(message.chat.id)}, headers=headers)
         pars = json.loads(r.text)
-        raspars = pars[0]
-        bot.send_message(message.chat.id, str(raspars.get('description')))
+        for raspars in pars:
+            bot.send_message(message.chat.id, str(raspars.get('description')))
+
 
 
 @bot.message_handler(content_types=['contact'])
