@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 import json
 import requests
-
+import os
 
 bot = telebot.TeleBot('902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI')
 
@@ -38,8 +38,6 @@ def task(message):
         r = requests.get('https://aoverinapp.herokuapp.com/joblists', params={"id": num_chat.get(message.chat.id)}, headers=headers)
         pars = json.loads(r.text)
         raspars = pars[0]
-        print(pars)
-        print(r.text)
         bot.send_message(message.chat.id, str(raspars.get('description')))
 
 
@@ -51,9 +49,7 @@ def read_phone(message):
         new_phone = int(message.contact.phone_number.replace('+', ''))
         pyt_q = {"id": new_phone, "telegramId": int(message.chat.id)}
         json_q = json.dumps(pyt_q)
-        print(json_q)
         r = requests.post('https://aoverinapp.herokuapp.com/users', data=json_q, headers=headers)
-        print(r.text)
         # q = requests.get('https://aoverinapp.herokuapp.com/users', data=["id"])
         # print(q.text)
         # url = 'https://aoverinapp.herokuapp.com/users'
@@ -78,15 +74,13 @@ def all_text(message):
             headers = {'content-type': 'application/json'}
             pyt_q = {"id": num_chat[message.chat.id], "title": "Telegram", "description": task_desc[message.chat.id]}
             json_q = json.dumps(pyt_q)
+            bot.send_message(message.chat.id, 'Одну минуточку)')
             r = requests.post('https://aoverinapp.herokuapp.com/joblists', data=json_q,  headers=headers)
             bot.send_message(message.chat.id, 'Задача добавлена')
-            print(json_q)
-            task_desc[message.chat.id] = ''
-            print(task_desc)
+            task_desc[message.chat.id] = None
         elif message.text == 'Нет':
-
             bot.send_message(message.chat.id, 'Окей(')
-            task_desc[message.chat.id] = ''
+            task_desc[message.chat.id] = None
             print(task_desc)
 
 
@@ -103,24 +97,4 @@ def all_text(message):
 #             # print(response.read())
 #             # response.close()
 
-
-# if "HEROKU" in list(os.environ.keys()):
-    # #     logger = telebot.logger
-    # #     telebot.logger.setLevel(logging.INFO)
-    # #
-    # #     server = Flask(__name__)
-    # #     @server.route("/bot", methods=['POST'])
-    # #     def getMessage():
-    # #         bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-    # #         return "!", 200
-    # #     @server.route("/")
-    # #     def webhook():
-    # #         bot.remove_webhook()
-    # #         bot.set_webhook(url="https://aoverinapp.herokuapp.com/")
-    # #         return "?", 200
-    # #     server.run(host="0.0.0.0", port=os.environ.get('PORT', 80))
-    # # else:
-    # #     # если переменной окружения HEROKU нету, значит это запуск с машины разработчика.
-    # #     # Удаляем вебхук на всякий случай, и запускаем с обычным поллингом.
-    # #     bot.remove_webhook()
 bot.polling()
