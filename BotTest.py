@@ -1,11 +1,8 @@
 import telebot
 from telebot import types
 import json
-import urllib.request
 import requests
-import logging
-from flask import Flask, request
-import os
+
 
 bot = telebot.TeleBot('902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI')
 
