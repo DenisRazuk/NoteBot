@@ -43,7 +43,7 @@ def task(message):
         raspars = pars[0]
         print(pars)
         print(r.text)
-        bot.send_message(message.chat.id, str(raspars.get('description'))) #
+        bot.send_message(message.chat.id, str(raspars.get('description')))
 
 
 @bot.message_handler(content_types=['contact'])
