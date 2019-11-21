@@ -109,13 +109,14 @@ def all_text(message):
 
 # bot.polling()
 
+
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url="https://limitless-cliffs-44855.herokuapp.com/bot") #пробывал и https://somename.herokuapp.com
+    bot.set_webhook(url="https://limitless-cliffs-44855.herokuapp.com/" + '902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI')
     return "!", 200
 
 
-server.run(host="91.108.6.139", port=int(os.environ.get('PORT', 5000)))
-server = Flask(__name__)
+server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+
 
