@@ -11,6 +11,9 @@ USERS = os.environ.get('USERS')
 bot = telebot.TeleBot(TOKEN)
 
 
+r = requests.get(USERS+'all')
+print(r.text)
+pars = json.loads(r.text)
 num_chat = {}
 task_desc = {}
 
