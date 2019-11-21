@@ -5,17 +5,21 @@ import requests
 import os
 from flask import Flask, request
 
+
 TOKEN = os.environ.get('TOKEN')
 JOBLIST = os.environ.get('JOBLIST')
 USERS = os.environ.get('USERS')
 bot = telebot.TeleBot(TOKEN)
 
 
-r = requests.get(USERS+'all')
-print(r.text)
-pars = json.loads(r.text)
 num_chat = {}
 task_desc = {}
+
+
+u = requests.get(USERS+'/all')
+upars = json.loads(u.text)
+for i in upars:
+    num_chat[int(i.get('telegramId'))] = int(i.get('id'))
 
 
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True, True)
@@ -38,6 +42,8 @@ def phone(message):
         button_phone = types.KeyboardButton(text="Отправить номер телефона", request_contact=True)
         keyboard.add(button_phone)
         bot.send_message(message.chat.id, 'Для регистрации необходим номер телефона', reply_markup=keyboard)
+    else:
+        bot.send_message(message.chat.id, 'Вы уже зарегистрированы')
 
 
 @bot.message_handler(commands=['task'])
@@ -82,8 +88,8 @@ def all_text(message):
             print(task_desc)
 
 
-# TODO Сделать сбор num_chat перед запуском с БД
-# TODO Переделать чек на запрос в API
+# TODO Сделать сбор num_chat перед запуском
+
 
 
 bot.polling()
