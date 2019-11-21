@@ -12,13 +12,19 @@ USERS = os.environ.get('USERS')
 bot = telebot.TeleBot(TOKEN)
 
 
+# TOKEN = '902148830:AAGUIUgNQPfJzul8WnC6INB82KtbIKQlgqE'
+# JOBLIST = 'https://aoverinapp.herokuapp.com/joblists'
+# USERS = 'https://aoverinapp.herokuapp.com/users'
+# bot = telebot.TeleBot(TOKEN)
+
+
 num_chat = {}
 task_desc = {}
 
 
 u = requests.get(USERS+'/all')
-upars = json.loads(u.text)
-for i in upars:
+u_pars = json.loads(u.text)
+for i in u_pars:
     num_chat[int(i.get('telegramId'))] = int(i.get('id'))
 
 
@@ -49,11 +55,24 @@ def phone(message):
 @bot.message_handler(commands=['task'])
 def task(message):
     if check_user(message):
+        jobs_buttuns = []
+        key = types.InlineKeyboardMarkup()
         headers = {'content-type': 'application/json'}
         r = requests.get(JOBLIST, params={"id": num_chat.get(message.chat.id)}, headers=headers)
-        pars = json.loads(r.text)
-        for raspars in pars:
-            bot.send_message(message.chat.id, str(raspars.get('description')))
+        job_list = json.loads(r.text)
+        for job in job_list:
+            # bot.send_message(message.chat.id, str(raspars.get('description')))
+            jobs_buttuns.append(types.InlineKeyboardButton(text=str(job.get('description')), callback_data=str(job.get('id'))+'_task_but'))
+            key.add(jobs_buttuns[-1])
+            # if len(jobs_buttuns) >= 5:
+            #     break
+        bot.send_message(message.chat.id, "Список задач", reply_markup=key)
+
+
+@bot.callback_query_handler(func=lambda c:True)
+def inlin(c):
+    if 'task_but' in c.data:
+        bot.send_message(c.message.chat.id, str(c.data))
 
 
 @bot.message_handler(content_types=['contact'])
@@ -86,10 +105,6 @@ def all_text(message):
             bot.send_message(message.chat.id, 'Окей(')
             task_desc[message.chat.id] = None
             print(task_desc)
-
-
-# TODO Сделать сбор num_chat перед запуском
-
 
 
 bot.polling()
