@@ -3,9 +3,11 @@ from telebot import types
 import json
 import requests
 import os
-from telegram.ext import Updater
+from flask import Flask, request
 
 bot = telebot.TeleBot('902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI')
+
+server = Flask(__name__)
 
 num_chat = {}
 task_desc = {}
@@ -15,9 +17,6 @@ task_desc = {}
 # print(pars)
 # print(r)
 # print(data)
-
-
-
 
 
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True, True)
@@ -52,7 +51,6 @@ def task(message):
             bot.send_message(message.chat.id, str(raspars.get('description')))
 
 
-
 @bot.message_handler(content_types=['contact'])
 def read_phone(message):
     if num_chat.get(message.contact.phone_number) is None:
@@ -75,6 +73,7 @@ def read_phone(message):
 #     if message.text
 #     bot.send_message(message.chat.id, 'Добавить задачу с названием ' + message.text)
 
+
 @bot.message_handler(content_types=['text'])
 def all_text(message):
     if check_user(message):
@@ -96,7 +95,6 @@ def all_text(message):
             print(task_desc)
 
 
-
 # TODO Сделать тест webhook
 # TODO Сделать сбор num_chat перед запуском с БД
 # TODO Переделать чек на запрос в API
@@ -111,11 +109,12 @@ def all_text(message):
 
 # bot.polling()
 
-TOKEN = "902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI"
-PORT = int(os.environ.get('PORT', '8443'))
-updater = Updater(TOKEN)
-updater.start_webhook(listen="127.0.0.1",
-                      port=5000,
-                      url_path=TOKEN)
-updater.bot.set_webhook("https://<limitless-cliffs-44855.herokuapp.com/" + TOKEN)
-updater.idle()
+@server.route("/")
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url="https://limitless-cliffs-44855.herokuapp.com/bot") #пробывал и https://somename.herokuapp.com
+    return "!", 200
+
+
+server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+server = Flask(__name__)
