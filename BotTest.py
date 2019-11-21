@@ -113,7 +113,7 @@ def all_text(message):
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url="https://limitless-cliffs-44855.herokuapp.com/" + '902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI')
+    bot.set_webhook(url="https://limitless-cliffs-44855.herokuapp.com/902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI")
     return "!", 200
 
 
