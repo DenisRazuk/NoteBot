@@ -5,11 +5,12 @@ import requests
 import os
 from flask import Flask, request
 
-print(os.environ.get('TOKEN'))
-bot = telebot.TeleBotos.os.environ('TOKEN')
+TOKEN = os.environ.get('TOKEN')
+JOBLIST = os.environ.get('JOBLIST')
+USERS = os.environ.get('USERS')
+bot = telebot.TeleBot(TOKEN)
 # ('902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI')
 
-server = Flask(__name__)
 
 num_chat = {}
 task_desc = {}
@@ -49,7 +50,7 @@ def phone(message):
 def task(message):
     if check_user(message):
         headers = {'content-type': 'application/json'}
-        r = requests.get('https://aoverinapp.herokuapp.com/joblists', params={"id": num_chat.get(message.chat.id)}, headers=headers)
+        r = requests.get(JOBLIST, params={"id": num_chat.get(message.chat.id)}, headers=headers)
         pars = json.loads(r.text)
         for raspars in pars:
             bot.send_message(message.chat.id, str(raspars.get('description')))
@@ -63,7 +64,7 @@ def read_phone(message):
         new_phone = int(message.contact.phone_number.replace('+', ''))
         pyt_q = {"id": new_phone, "telegramId": int(message.chat.id)}
         json_q = json.dumps(pyt_q)
-        r = requests.post('https://aoverinapp.herokuapp.com/users', data=json_q, headers=headers)
+        r = requests.post(USERS, data=json_q, headers=headers)
         # q = requests.get('https://aoverinapp.herokuapp.com/users', data=["id"])
         # print(q.text)
         # url = 'https://aoverinapp.herokuapp.com/users'
@@ -90,7 +91,7 @@ def all_text(message):
             pyt_q = {"id": num_chat[message.chat.id], "title": "Telegram", "description": task_desc[message.chat.id]}
             json_q = json.dumps(pyt_q)
             bot.send_message(message.chat.id, 'Одну минуточку)')
-            r = requests.post('https://aoverinapp.herokuapp.com/joblists', data=json_q,  headers=headers)
+            r = requests.post(JOBLIST, data=json_q,  headers=headers)
             bot.send_message(message.chat.id, 'Задача добавлена')
             task_desc[message.chat.id] = None
         elif message.text == 'Нет':
