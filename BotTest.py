@@ -9,19 +9,10 @@ TOKEN = os.environ.get('TOKEN')
 JOBLIST = os.environ.get('JOBLIST')
 USERS = os.environ.get('USERS')
 bot = telebot.TeleBot(TOKEN)
-# ('902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI')
 
 
 num_chat = {}
 task_desc = {}
-
-
-
-# r = requests.get('https://aoverinapp.herokuapp.com/users', data = {"id": "telegtamd"})
-# pars = json.loads(r.text)
-# print(pars)
-# print(r)
-# print(data)
 
 
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True, True)
@@ -65,18 +56,6 @@ def read_phone(message):
         pyt_q = {"id": new_phone, "telegramId": int(message.chat.id)}
         json_q = json.dumps(pyt_q)
         r = requests.post(USERS, data=json_q, headers=headers)
-        # q = requests.get('https://aoverinapp.herokuapp.com/users', data=["id"])
-        # print(q.text)
-        # url = 'https://aoverinapp.herokuapp.com/users'
-        # data = {message.contact.phone_number, message.chat.id}
-        # data_json = json.dumps(data)
-        # payload = {'json_payload': data_json}
-        # req = requests.get(url, data = payload)
-
-# @bot.message_handler(content_types=['text'])
-# def num_phone(message):
-#     if message.text
-#     bot.send_message(message.chat.id, 'Добавить задачу с названием ' + message.text)
 
 
 @bot.message_handler(content_types=['text'])
@@ -100,28 +79,10 @@ def all_text(message):
             print(task_desc)
 
 
-# TODO Сделать тест webhook
 # TODO Сделать сбор num_chat перед запуском с БД
 # TODO Переделать чек на запрос в API
 
 
-# Запрос на отпрвку в апишку
-# title_text = message.text
-# bot.send_message(message.chat.id, 'Введите описание задачи')
-# response = urllib.request.urlopen('https://aoverinapp.herokuapp.com/users')
-#             # print(response.read())
-#             # response.close()
-
 bot.polling()
-
-
-# @server.route("/")
-# def webhook():
-#     bot.remove_webhook()
-#     bot.set_webhook(url="https://limitless-cliffs-44855.herokuapp.com/902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI")
-#     return "!", 200
-#
-#
-# server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
 
 
