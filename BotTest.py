@@ -3,11 +3,22 @@ from telebot import types
 import json
 import requests
 import os
+from telegram.ext import Updater
 
 bot = telebot.TeleBot('902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI')
 
 num_chat = {}
 task_desc = {}
+
+# r = requests.get('https://aoverinapp.herokuapp.com/users', data = {"id": "telegtamd"})
+# pars = json.loads(r.text)
+# print(pars)
+# print(r)
+# print(data)
+
+
+
+
 
 keyboard1 = telebot.types.ReplyKeyboardMarkup(True, True)
 keyboard1.row('Да', 'Нет')
@@ -85,10 +96,10 @@ def all_text(message):
             print(task_desc)
 
 
-# Сделать /help с описанием
-# Сделать тест webhook
-# Сделать сбор num_chat перед запуском с БД
-# Переделать чек на запрос в API
+
+# TODO Сделать тест webhook
+# TODO Сделать сбор num_chat перед запуском с БД
+# TODO Переделать чек на запрос в API
 
 
 # Запрос на отпрвку в апишку
@@ -98,4 +109,13 @@ def all_text(message):
 #             # print(response.read())
 #             # response.close()
 
-bot.polling()
+# bot.polling()
+
+TOKEN = "902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI"
+PORT = int(os.environ.get('PORT', '8443'))
+updater = Updater(TOKEN)
+updater.start_webhook(listen="0.0.0.0",
+                      port=5000,
+                      url_path=TOKEN)
+updater.bot.set_webhook("https://<appname>.herokuapp.com/" + TOKEN)
+updater.idle()
