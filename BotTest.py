@@ -5,12 +5,16 @@ import requests
 import os
 from flask import Flask, request
 
-bot = telebot.TeleBot('902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI')
+print(os.environ.get('TOKEN'))
+bot = telebot.TeleBotos.os.environ('TOKEN')
+# ('902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI')
 
 server = Flask(__name__)
 
 num_chat = {}
 task_desc = {}
+
+
 
 # r = requests.get('https://aoverinapp.herokuapp.com/users', data = {"id": "telegtamd"})
 # pars = json.loads(r.text)
@@ -107,16 +111,16 @@ def all_text(message):
 #             # print(response.read())
 #             # response.close()
 
-# bot.polling()
+bot.polling()
 
 
-@server.route("/")
-def webhook():
-    bot.remove_webhook()
-    bot.set_webhook(url="https://limitless-cliffs-44855.herokuapp.com/902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI")
-    return "!", 200
-
-
-server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+# @server.route("/")
+# def webhook():
+#     bot.remove_webhook()
+#     bot.set_webhook(url="https://limitless-cliffs-44855.herokuapp.com/902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI")
+#     return "!", 200
+#
+#
+# server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
 
 
