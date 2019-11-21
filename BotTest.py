@@ -114,8 +114,8 @@ def all_text(message):
 TOKEN = "902148830:AAF5Qg73b5P1rSM3kCPzolyvAX_XsS_dYaI"
 PORT = int(os.environ.get('PORT', '8443'))
 updater = Updater(TOKEN)
-updater.start_webhook(listen="0.0.0.0",
+updater.start_webhook(listen="127.0.0.1",
                       port=5000,
                       url_path=TOKEN)
-updater.bot.set_webhook("https://<appname>.herokuapp.com/" + TOKEN)
+updater.bot.set_webhook("https://<limitless-cliffs-44855.herokuapp.com/" + TOKEN)
 updater.idle()
