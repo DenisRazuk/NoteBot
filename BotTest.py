@@ -23,6 +23,7 @@ def all_111(message):
 def all_111(message):
     ran1 = random.randint(0, len(vovapidr) - 1)
     bot.send_message(message.chat.id, vovapidr[ran1])
+    chet[vovapidr[ran1]] = chet.get(vovapidr[ran1], 0) + 1
 
 
 @bot.message_handler(content_types=['text'])
