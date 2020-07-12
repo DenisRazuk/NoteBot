@@ -4,7 +4,7 @@ import random
 from datetime import datetime as dt
 
 
-TOKEN = os.environ.get('TOKEN')
+TOKEN = '902148830:AAGUIUgNQPfJzul8WnC6INB82KtbIKQlgqE'
 # JOBLIST = os.environ.get('JOBLIST')
 # USERS = os.environ.get('USERS')
 bot = telebot.TeleBot(TOKEN)
@@ -13,11 +13,12 @@ vovapidr = ['Вова пидр', 'Вова гомогей', 'Вова ебокл
 chet = {}
 
 
-
-@bot.message_handler(commands=['stat'])
-def all_111(message):
-    stata = str(chet).replace("'", '').replace(':', ' -').replace(', ', '\n').replace('{', '').replace('}', '')
-    bot.send_message(message.chat.id, str(stata))
+# @bot.message_handler(commands=['stat'])
+# def all_111(message):
+#     stroka = str(chet)
+#     stroka = stroka.replace("'", '')
+#     stroka = stroka.replace(',', '\n')
+#     bot.send_message(message.chat.id, stroka)
 
 
 @bot.message_handler(commands=['jelch'])
@@ -42,3 +43,6 @@ def all_text(message):
 
 
 bot.polling()
+
+
+
