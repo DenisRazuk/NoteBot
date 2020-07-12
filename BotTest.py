@@ -19,18 +19,22 @@ def all_111(message):
     bot.send_message(message.chat.id, str(chet))
 
 
+@bot.message_handler(commands=['jelch'])
+def all_111(message):
+    ran1 = random.randint(0, len(vovapidr) - 1)
+    bot.send_message(message.chat.id, vovapidr[ran1])
+
+
 @bot.message_handler(content_types=['text'])
 def all_text(message):
     if message.from_user.id == 325667968:
         aaa = random.randint(0, 2)
-        print(aaa)
         date1 = message.date
         date1 = dt.fromtimestamp(date1)
         today = dt.now()
         ddd = today - date1
         if aaa == 0 and abs(ddd.total_seconds()) < 10:
             ran = random.randint(0, len(vovapidr) - 1)
-            print(ran)
             bot.send_message(message.chat.id, vovapidr[ran])
             chet[vovapidr[ran]] = chet.get(vovapidr[ran], 0) + 1
 
