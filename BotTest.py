@@ -13,10 +13,6 @@ TOKEN = os.environ.get('TOKEN')
 bot = telebot.TeleBot(TOKEN)
 vovaDAO = VovaPunishDAO(dbname, user, password, host)
 vovaSer = service.VovaPunishService(vovaDAO)
-vovapidr = ['Вова пидр', 'Вова гомогей', 'Вова ебоклак', 'Вова хуй', 'Вова пизда', 'Вова говной ваняет', 'Вова мразь', 'Вова хуева',
-            'Вова чмо', 'Вова мудак', 'Вова такой хуевый, что дядя даже не стал его ебать', 'Вова петух', 'Вова иди нахуй']
-chet = {}
-
 
 
 # @bot.message_handler(commands=['stat'])
