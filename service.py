@@ -18,7 +18,7 @@ class VovaPunishService:
                 slova.get(int(i[2])).append(i[1])
         for i in slova:
             strok = strok.replace(str(i), self.getWord(slova.get(i)))
-        return strok
+        return strok.replace('  ', ' ').replace(' ,', ',')
 
     def getWord(self, mass) -> str:
         lm = len(mass)
