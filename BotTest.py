@@ -10,6 +10,7 @@ user = os.environ.get('user')
 password = os.environ.get('password')
 host = os.environ.get('host')
 TOKEN = os.environ.get('TOKEN')
+vova_id = os.environ.get('vova_id')
 bot = telebot.TeleBot(TOKEN)
 vovaDAO = VovaPunishDAO(dbname, user, password, host)
 vovaSer = service.VovaPunishService(vovaDAO)
@@ -27,7 +28,7 @@ def make_jelch(message):
 
 @bot.message_handler(content_types=['text'])
 def make_punish(message):
-    if message.from_user.id == 325667968:
+    if message.from_user.id == int(vova_id):
         aaa = random.randint(0, 7)
         date1 = message.date
         date1 = dt.fromtimestamp(date1)
