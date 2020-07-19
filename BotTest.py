@@ -15,19 +15,18 @@ vovaDAO = VovaPunishDAO(dbname, user, password, host)
 vovaSer = service.VovaPunishService(vovaDAO)
 
 
-# @bot.message_handler(commands=['stat'])
-# def all_111(message):
-#     stata = str(chet).replace("'", '').replace(':', ' -').replace(', ', '\n').replace('{', '').replace('}', '')
-#     bot.send_message(message.chat.id, str(stata))
+@bot.message_handler(commands=['stat'])
+def get_stat(message):
+    bot.send_message(message.chat.id, vovaSer.get_stat_punish())
 
 
 @bot.message_handler(commands=['jelch'])
-def all_111(message):
-    bot.send_message(message.chat.id, vovaSer.makePunish())
+def make_jelch(message):
+    bot.send_message(message.chat.id, vovaSer.make_punish())
 
 
 @bot.message_handler(content_types=['text'])
-def all_text(message):
+def make_punish(message):
     if message.from_user.id == 325667968:
         aaa = random.randint(0, 7)
         date1 = message.date
@@ -35,8 +34,7 @@ def all_text(message):
         today = dt.now()
         ddd = today - date1
         if aaa == 0 and abs(ddd.total_seconds()) < 10:
-            bot.send_message(message.chat.id, vovaSer.makePunish())
-            # chet[vovapidr[ran]] = chet.get(vovapidr[ran], 0) + 1
+            bot.send_message(message.chat.id, vovaSer.make_punish())
 
 
 bot.polling()
