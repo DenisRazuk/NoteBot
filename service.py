@@ -12,7 +12,7 @@ class VovaPunishService:
 
     def make_punish(self):
         strok = self.template
-        data = self.dbApi.getPunish()
+        data = self.dbApi.get_punish()
         slova = {}
         for i in data:
             if slova.get(int(i[2])) is None:
@@ -31,14 +31,16 @@ class VovaPunishService:
         word = mass[ran]
         return word
 
-    # todo переделать на сохранение в БД
-    def add_stat_punish(self, punish):
-        self.statsPunishInfo[punish] = self.statsPunishInfo.get(punish, 0) + 1
+    def add_stat_punish(self, punish: str):
+        self.dbApi.insert_punish(punish)
 
-    # todo переделать на получение из БД
     def get_stat_punish(self) -> str:
         str_format = "{0}:{1}"
-        return "\n".join([str_format.format(k, v) for k, v in self.statsPunishInfo.items()])
+        stat_pun = self.dbApi.get_stat_punish()
+        if len(stat_pun) != 0:
+            return "\n".join([str_format.format(i[0], i[1]) for i in stat_pun])
+        else:
+            return "Ничего нет("
 
     def replace_all(self, punish: str) -> str:
         for k, v in self.word_to_replace.items():

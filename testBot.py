@@ -2,7 +2,8 @@ from telebot import types
 import telebot
 from service import VovaPunishService
 import os, re
-
+import service
+import DBApi
 
 TOKEN = '902148830:AAGUIUgNQPfJzul8WnC6INB82KtbIKQlgqE'
 JOBLIST = 'https://aoverinapp.herokuapp.com/joblists'
@@ -40,10 +41,15 @@ USERS = 'https://aoverinapp.herokuapp.com/users'
 
 
 # bot.polling()
+dbname = os.environ.get('dbname')
+user = os.environ.get('user')
+password = os.environ.get('password')
+host = os.environ.get('host')
+vovaDAO = DBApi.VovaPunishDAO(dbname, user, password, host)
+v = service.VovaPunishService(vovaDAO)
 
-v = VovaPunishService(None)
 
-v.add_stat_punish("Бла бла")
-v.add_stat_punish("Бла бла")
-v.add_stat_punish("Бла")
+# v.add_stat_punish("Бла бла")
+# v.add_stat_punish("Бла бла")
+# v.add_stat_punish("Бла")
 print(v.get_stat_punish())
