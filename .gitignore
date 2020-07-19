@@ -122,3 +122,4 @@ application-dev.properties
 hs_err_pid*
 
 __pycache__
+venv
