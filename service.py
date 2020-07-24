@@ -38,7 +38,8 @@ class VovaPunishService:
         str_format = "{0}:{1}"
         stat_pun = self.dbApi.get_stat_punish()
         if len(stat_pun) != 0:
-            return "\n".join([str_format.format(i[0], i[1]) for i in stat_pun])
+            data = "\n".join([str_format.format(i[0], i[1]) for i in stat_pun]) + "\n" + self.get_count_of_all_punish()
+            return data
         else:
             return "Ничего нет("
 
@@ -46,3 +47,15 @@ class VovaPunishService:
         for k, v in self.word_to_replace.items():
             punish = punish.replace(k, v)
         return punish
+
+    def get_count_of_all_punish(self) -> str:
+        all_cnt = self.dbApi.get_all_count_punish()
+        cur_cnt = self.dbApi.get_count_punish()
+        all_cnt = 0 if len(all_cnt) == 0 else int(all_cnt[0][0])
+        cur_cnt = 0 if len(cur_cnt) == 0 else int(cur_cnt[0][0])
+        if all_cnt != 0:
+            data = 'Открыто оскорблений {0} из {1} - {2}%'.format(cur_cnt, all_cnt, round(cur_cnt/all_cnt*100, 2))
+        else:
+            data = 'Нет слов'
+        return data
+

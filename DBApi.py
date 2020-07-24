@@ -27,6 +27,19 @@ class VovaPunishDAO:
         cursor.close()
         return data
 
+    def get_all_count_punish(self):
+        cursor = self.conn.cursor()
+        cursor.execute('select round(exp(sum(ln(cnt)))) from(select type, count(*) cnt from public.punish group by type) as foo')
+        data = cursor.fetchall()
+        cursor.close()
+        return data
+
+    def get_count_punish(self):
+        cursor = self.conn.cursor()
+        cursor.execute('select count(distinct punish) from public.stats_punish')
+        data = cursor.fetchall()
+        cursor.close()
+        return data
 
 
 
