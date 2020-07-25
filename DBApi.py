@@ -42,7 +42,3 @@ class VovaPunishDAO:
         return data
 
 
-
-
-
-
