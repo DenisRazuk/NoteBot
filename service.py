@@ -1,14 +1,17 @@
 import random
 from datetime import datetime as dt
+from Dictionaries import SettingsDict as SetDict
+from DBApi import VovaPunishDAO
+from Utils import Support
+
 
 class VovaPunishService:
 
-    def __init__(self, dbApi) -> None:
-        self.word_to_replace = {"  ": " ",
-                                " ,": ","}
-        self.dbApi = dbApi
+    def __init__(self, db_api: VovaPunishDAO) -> None:
+        self.dbApi = db_api
         self.template = '1 2 3 4'
-        self.statsPunishInfo = {}
+        self.settings_to_view = [SetDict.chance()]
+        self.util = Support()
 
     def make_punish(self):
         strok = self.template
@@ -21,7 +24,7 @@ class VovaPunishService:
                 slova.get(int(i[2])).append(i[1])
         for i in slova:
             strok = strok.replace(str(i), self.get_word(slova.get(i)))
-        strok = self.replace_all(strok)
+        strok = self.util.replace_all(strok)
         self.add_stat_punish(strok)
         return strok
 
@@ -35,23 +38,13 @@ class VovaPunishService:
         self.dbApi.insert_punish(punish)
 
     def get_stat_punish(self) -> str:
-        str_format = "{0}:{1}"
         stat_pun = self.dbApi.get_stat_punish()
         if len(stat_pun) != 0:
-            data = 'ТОП 10 ОСКОРБЛЕНИЙ:'\
-                 + "\n"\
-                 + "\n".join([str_format.format(i[0], i[1]) for i in stat_pun[0: 10]]) \
-                 + "\n"\
-                 + "\n"\
-                 + self.get_count_of_all_punish()
-            return data
+            return self.util.make_message_from_list("ТОП 10 ОСКОРБЛЕНИЙ:",
+                                                    stat_pun[0: 10],
+                                                    self.get_count_of_all_punish())
         else:
             return "Ничего нет("
-
-    def replace_all(self, punish: str) -> str:
-        for k, v in self.word_to_replace.items():
-            punish = punish.replace(k, v)
-        return punish
 
     def get_count_of_all_punish(self) -> str:
         all_cnt = self.dbApi.get_all_count_punish()
@@ -66,8 +59,14 @@ class VovaPunishService:
 
     def need_send(self, ms_date: int) -> bool:
         rand_num = random.randint(1, 100)
-        punish_chance = int(self.dbApi.get_settings('chance'))
+        punish_chance = int(self.dbApi.get_settings(SetDict.chance()))
         diff_data = dt.now() - dt.fromtimestamp(ms_date)
         if rand_num <= punish_chance and abs(diff_data.total_seconds()) < 10:
             return True
         return False
+
+    def get_all_settings(self) -> str:
+        settings = {}
+        for setting in self.settings_to_view:
+            settings[setting] = self.dbApi.get_settings(setting)
+        return self.util.make_message_from_dict("Настройки:", settings)
