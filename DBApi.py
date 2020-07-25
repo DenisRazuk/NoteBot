@@ -29,7 +29,8 @@ class VovaPunishDAO:
 
     def get_all_count_punish(self) -> list:
         cursor = self.conn.cursor()
-        cursor.execute('select round(exp(sum(ln(cnt)))) from(select type, count(*) cnt from public.punish group by type) as foo')
+        cursor.execute('select round(exp(sum(ln(cnt)))) from(select type, count(*) cnt from '
+                       'public.punish group by type) as foo')
         data = cursor.fetchall()
         cursor.close()
         return data
@@ -41,4 +42,13 @@ class VovaPunishDAO:
         cursor.close()
         return data
 
+    def get_settings(self, set_name: str) -> str:
+        cursor = self.conn.cursor()
+        cursor.execute('select param_num, param_text, param_date, param_bool from public.punish_settings where '
+                       'param_name = %s', [set_name])
+        data = cursor.fetchall()
+        firs_row = next((i for i in data if i is not None), '')
+        set_value = next((i for i in firs_row if i is not None), '')
+        cursor.close()
+        return set_value
 
