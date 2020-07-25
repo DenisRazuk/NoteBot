@@ -38,7 +38,12 @@ class VovaPunishService:
         str_format = "{0}:{1}"
         stat_pun = self.dbApi.get_stat_punish()
         if len(stat_pun) != 0:
-            data = "\n".join([str_format.format(i[0], i[1]) for i in stat_pun]) + "\n" + self.get_count_of_all_punish()
+            data = 'ТОП ОСКОРБЛЕНИЙ:'\
+                 + "\n"\
+                 + "\n".join([str_format.format(i[0], i[1]) for i in stat_pun[0: 10]]) \
+                 + "\n"\
+                 + "\n"\
+                 + self.get_count_of_all_punish()
             return data
         else:
             return "Ничего нет("
