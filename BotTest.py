@@ -29,12 +29,7 @@ def make_jelch(message):
 @bot.message_handler(content_types=['text'])
 def make_punish(message):
     if message.from_user.id == int(vova_id):
-        aaa = random.randint(0, 7)
-        date1 = message.date
-        date1 = dt.fromtimestamp(date1)
-        today = dt.now()
-        ddd = today - date1
-        if aaa == 0 and abs(ddd.total_seconds()) < 10:
+        if vovaSer.need_send(message.date):
             bot.send_message(message.chat.id, vovaSer.make_punish())
 
 

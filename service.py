@@ -1,5 +1,5 @@
 import random
-
+from datetime import datetime as dt
 
 class VovaPunishService:
 
@@ -38,7 +38,7 @@ class VovaPunishService:
         str_format = "{0}:{1}"
         stat_pun = self.dbApi.get_stat_punish()
         if len(stat_pun) != 0:
-            data = 'ТОП ОСКОРБЛЕНИЙ:'\
+            data = 'ТОП 10 ОСКОРБЛЕНИЙ:'\
                  + "\n"\
                  + "\n".join([str_format.format(i[0], i[1]) for i in stat_pun[0: 10]]) \
                  + "\n"\
@@ -64,3 +64,10 @@ class VovaPunishService:
             data = 'Нет слов'
         return data
 
+    def need_send(self, ms_date: int) -> bool:
+        rand_num = random.randint(1, 100)
+        punish_chance = int(self.dbApi.get_settings('chance'))
+        diff_data = dt.now() - dt.fromtimestamp(ms_date)
+        if rand_num <= punish_chance and abs(diff_data.total_seconds()) < 10:
+            return True
+        return False
