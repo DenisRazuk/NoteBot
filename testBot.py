@@ -52,7 +52,7 @@ v = service.VovaPunishService(vovaDAO)
 # v.add_stat_punish("Бла бла")
 # v.add_stat_punish("Бла бла")
 # v.add_stat_punish("Бла")
-# print(v.get_all_count_punish())
+print(v.get_all_settings())
 
-print(vovaDAO.get_settings('fff'))
+# print(vovaDAO.get_settings('fff'))
 

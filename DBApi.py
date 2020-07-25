@@ -43,6 +43,10 @@ class VovaPunishDAO:
         return data
 
     def get_settings(self, set_name: str) -> str:
+        """
+
+        :rtype: str
+        """
         cursor = self.conn.cursor()
         cursor.execute('select param_num, param_text, param_date, param_bool from public.punish_settings where '
                        'param_name = %s', [set_name])

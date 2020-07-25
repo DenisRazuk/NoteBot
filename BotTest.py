@@ -1,7 +1,5 @@
 import telebot
 import os
-import random
-from datetime import datetime as dt
 from DBApi import VovaPunishDAO
 import service
 
@@ -15,6 +13,9 @@ bot = telebot.TeleBot(TOKEN)
 vovaDAO = VovaPunishDAO(dbname, user, password, host)
 vovaSer = service.VovaPunishService(vovaDAO)
 
+@bot.message_handler(commands=['conf'])
+def get_stat(message):
+    bot.send_message(message.chat.id, vovaSer.get_all_settings())
 
 @bot.message_handler(commands=['stat'])
 def get_stat(message):
